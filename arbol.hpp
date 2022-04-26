@@ -34,9 +34,13 @@ private:
 
 arbol::arbol()
 {
+    raiz = nullptr;
+    actual = nullptr;
 }
 void arbol::inicializa()
 {
+    raiz = nullptr;
+    actual = nullptr;
 }
 void arbol::insertar(contacto e)
 {
