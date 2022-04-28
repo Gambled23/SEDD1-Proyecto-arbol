@@ -44,6 +44,7 @@ void arbol::inicializa()
 }
 void arbol::insertar(contacto e)
 {
+    
 }
 void arbol::eliminar(int n)
 {
