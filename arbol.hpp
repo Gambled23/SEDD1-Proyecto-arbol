@@ -2,81 +2,41 @@
 #define ARBOL_H
 #include <iostream>
 #include <cstdlib>
-#include "nodo.hpp"
-#include "validaciones.hpp"
 #include "contacto.hpp"
 #pragma once
-
 using namespace std;
 
-class arbol
+struct nodo
 {
-public:
-    arbol();
-    nodo *raiz;
-    nodo *actual;
-    void inicializa();
-    void insertar(contacto);
-    void eliminar(int);
-    void editar(int);
-    void buscar(int);
-    void mostrar();
-    void orden();
-    void preorden();
-    void postorden();
-    void antecesor();
-    void sucesor();
-    void minimo();
-    void maximo();
-
-private:
+    contacto dato;
+    nodo *izq;
+    nodo *der;
 };
 
-arbol::arbol()
+//*Prototipos
+nodo *crearNodo(contacto);
+void insertarNodo(nodo *&, contacto);
+
+nodo *arbol = NULL;
+
+//*Funciones
+nodo *crearNodo(contacto n)
 {
-    raiz = nullptr;
-    actual = nullptr;
+    nodo *nuevo_nodo = new nodo();
+    nuevo_nodo->dato = n;
+    nuevo_nodo->izq = NULL;
+    nuevo_nodo->izq = NULL;
+
+    return nuevo_nodo;
 }
-void arbol::inicializa()
+
+void insertarNodo(nodo *&arbol, contacto n)
 {
-    raiz = nullptr;
-    actual = nullptr;
-}
-void arbol::insertar(contacto e)
-{
+    if (arbol == NULL) //arbol vacio
+    {
+        nodo *nuevo_nodo = new nodo(n);
+        
+    }
     
-}
-void arbol::eliminar(int n)
-{
-}
-void arbol::editar(int n)
-{
-}
-void arbol::buscar(int n)
-{
-}
-void arbol::mostrar()
-{
-}
-void arbol::orden()
-{
-}
-void arbol::preorden()
-{
-}
-void arbol::postorden()
-{
-}
-void arbol::antecesor()
-{
-}
-void arbol::sucesor()
-{
-}
-void arbol::minimo()
-{
-}
-void arbol::maximo()
-{
 }
 #endif

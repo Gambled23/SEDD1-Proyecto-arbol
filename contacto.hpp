@@ -5,7 +5,7 @@
 #pragma once
 
 using namespace std;
-
+int idAux = 0;
 class contacto
 {
 public:
@@ -13,21 +13,8 @@ public:
     int id;
     string nombre, direccion, email;
     contacto(string, string, string);
-private:
 
+private:
 };
 
-contacto::contacto()
-{
-    nombre = "";
-    direccion = "";
-    email = "";
-    id = 0;
-}
-contacto::contacto(string nom, string dir, string ema)
-{
-    nombre = nom;
-    direccion = dir;
-    email = ema;
-}
 #endif
