@@ -1,6 +1,6 @@
 #include <iostream>
-#include <cstdlib>
 #include <string>
+#include <cstdlib>
 #include "validaciones.hpp"
 #include "contacto.hpp"
 using namespace std;
@@ -18,6 +18,8 @@ void insertarNodo(Nodo *&, int);
 void buscarNodo(Nodo *, int);
 
 void preorden(Nodo *);
+void inorden(Nodo *);
+void postorden(Nodo *);
 
 Nodo *arbol = NULL;
 
@@ -75,8 +77,48 @@ void buscarNodo(Nodo *arbol, int n)
         return buscarNodo(arbol->der, n);
     }
 }
-void preorden(Nodo *);
 
+void preorden(Nodo *arbol)
+{
+    if (arbol == NULL)
+    {
+        return;
+    }
+    else
+    {
+        cout << arbol->dato << " - ";
+        preorden(arbol->izq);
+        preorden(arbol->der);
+    }
+}
+
+void inorden(Nodo *arbol)
+{
+    if (arbol == NULL)
+    {
+        return;
+    }
+    else
+    {
+        inorden(arbol->izq);
+        cout << arbol->dato << " - ";
+        inorden(arbol->der);
+    }
+}
+
+void postorden(Nodo *arbol)
+{
+    if (arbol == NULL)
+    {
+        return;
+    }
+    else
+    {
+        postorden(arbol->izq);
+        postorden(arbol->der);
+        cout << arbol->dato << " - ";
+    }
+}
 
 int main()
 {
@@ -91,16 +133,16 @@ int main()
         system("cls");
         cout << "Bienvenido al programa para arboles\n";
         cout << "1) Insertar datos\n";
-        cout << "2) Buscar nodo por ID\n";          
-        cout << "3) Buscar nodo por NOMBRE\n";      // Todo
-        cout << "4) Mostrar minimo ID\n";           // Todo
-        cout << "5) Mostrar maximo ID\n";           // Todo
-        cout << "6) Mostrar nodo antecesor\n";      // Todo
-        cout << "7) Mostrar nodo sucesor\n";        // Todo
-        cout << "8) Editar nodo (por ID)\n";        // Todo
-        cout << "9) Eliminar nodo (por ID)\n";      // Todo
-        cout << "10) Mostrar datos en orden\n";     // Todo
-        cout << "11) Mostrar datos en preorden\n";  // Todo
+        cout << "2) Buscar nodo por ID\n";
+        cout << "3) Buscar nodo por NOMBRE\n";    // Todo
+        cout << "4) Mostrar minimo ID\n";         // Todo
+        cout << "5) Mostrar maximo ID\n";         // Todo
+        cout << "6) Mostrar nodo antecesor\n";    // Todo
+        cout << "7) Mostrar nodo sucesor\n";      // Todo
+        cout << "8) Editar nodo (por ID)\n";      // Todo
+        cout << "9) Eliminar nodo (por ID)\n";    // Todo
+        cout << "10) Mostrar datos en inorden\n"; // Todo
+        cout << "11) Mostrar datos en preorden\n";
         cout << "12) Mostrar datos en postorden\n"; // Todo
         cout << "\n0) Salir\n";
         cin >> opcChar;
@@ -109,7 +151,7 @@ int main()
         {
         case 1:
             cout << "Ingrese el nombre del int\n";
-            cin>>intAux;
+            cin >> intAux;
             insertarNodo(arbol, intAux); // Insertar el dato
             break;
         case 2:
@@ -148,7 +190,8 @@ int main()
 
             break;
         case 11:
-
+            preorden(arbol);
+            cout << endl;
             break;
         case 12:
 
