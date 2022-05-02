@@ -16,7 +16,7 @@ struct Nodo
 Nodo *crearNodo(int);
 void insertarNodo(Nodo *&, int);
 void buscarNodo(Nodo *, int);
-
+void editarNodo(Nodo *, int);
 void preorden(Nodo *);
 void inorden(Nodo *);
 void postorden(Nodo *);
@@ -67,6 +67,31 @@ void buscarNodo(Nodo *arbol, int n)
         cout << "ID: " << arbol->dato << endl;
         cout << "Direccion: " << arbol->dato << endl;
         cout << "Email: " << arbol->dato << endl;
+    }
+    else if (n < arbol->dato)
+    {
+        return buscarNodo(arbol->izq, n);
+    }
+    else if (n > arbol->dato)
+    {
+        return buscarNodo(arbol->der, n);
+    }
+}
+
+void editarNodo(Nodo *arbol, int n)
+{
+    int aux;
+    char auxChar[100];
+    if (arbol == NULL) // No encuentra el id
+    {
+        return;
+    }
+    else if (arbol->dato == n) // Encuentra el id
+    {
+        cout << "Ingresa el nuevo valor: ";
+        cin>>auxChar[100];
+        aux = validarNumInt(auxChar);
+        arbol->dato = aux;
     }
     else if (n < arbol->dato)
     {
@@ -134,16 +159,16 @@ int main()
         cout << "Bienvenido al programa para arboles\n";
         cout << "1) Insertar datos\n";
         cout << "2) Buscar nodo por ID\n";
-        cout << "3) Buscar nodo por NOMBRE\n";    // Todo
-        cout << "4) Mostrar minimo ID\n";         // Todo
-        cout << "5) Mostrar maximo ID\n";         // Todo
-        cout << "6) Mostrar nodo antecesor\n";    // Todo
-        cout << "7) Mostrar nodo sucesor\n";      // Todo
-        cout << "8) Editar nodo (por ID)\n";      // Todo
-        cout << "9) Eliminar nodo (por ID)\n";    // Todo
-        cout << "10) Mostrar datos en inorden\n"; // Todo
+        cout << "3) Buscar nodo por NOMBRE\n"; // Todo
+        cout << "4) Mostrar minimo ID\n";      // Todo
+        cout << "5) Mostrar maximo ID\n";      // Todo
+        cout << "6) Mostrar nodo antecesor\n"; // Todo
+        cout << "7) Mostrar nodo sucesor\n";   // Todo
+        cout << "8) Editar nodo (por ID)\n";   
+        cout << "9) Eliminar nodo (por ID)\n"; // Todo
+        cout << "10) Mostrar datos en inorden\n";
         cout << "11) Mostrar datos en preorden\n";
-        cout << "12) Mostrar datos en postorden\n"; // Todo
+        cout << "12) Mostrar datos en postorden\n";
         cout << "\n0) Salir\n";
         cin >> opcChar;
         opcInt = validarNumInt(opcChar);
@@ -180,6 +205,7 @@ int main()
             cout << "Ingrese la ID del int a editar\n";
             cin >> auxIDChar;
             auxIDInt = validarNumInt(auxIDChar);
+            editarNodo(arbol, auxIDInt);
             break;
         case 9:
             cout << "Ingrese la ID del int a eliminar\n";
@@ -187,14 +213,14 @@ int main()
             auxIDInt = validarNumInt(auxIDChar);
             break;
         case 10:
-
+            inorden(arbol);
             break;
         case 11:
             preorden(arbol);
             cout << endl;
             break;
         case 12:
-
+            postorden(arbol);
             break;
         case 0:
             cout << "Gracias por su preferencia" << endl;
