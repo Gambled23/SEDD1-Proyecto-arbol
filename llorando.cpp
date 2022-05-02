@@ -170,6 +170,12 @@ void eliminarNodo(Nodo *nodoEliminar)
         reemplazar(nodoEliminar, nodoEliminar->der);
         destruirNodo(nodoEliminar);
     }
+    else
+    {
+        reemplazar(nodoEliminar, NULL);
+        destruirNodo(nodoEliminar);
+    }
+    
 }
 Nodo *minimo(Nodo *arbol)
 {
@@ -273,7 +279,7 @@ int main()
         cout << "6) Mostrar nodo antecesor\n"; // Todo
         cout << "7) Mostrar nodo sucesor\n";   // Todo
         cout << "8) Editar nodo (por ID)\n";
-        cout << "9) Eliminar nodo (por ID)\n"; // Todo
+        cout << "9) Eliminar nodo (por ID)\n"; 
         cout << "10) Mostrar datos en inorden\n";
         cout << "11) Mostrar datos en preorden\n";
         cout << "12) Mostrar datos en postorden\n";
@@ -321,6 +327,7 @@ int main()
             cout << "Ingrese la ID del int a eliminar\n";
             cin >> auxIDChar;
             auxIDInt = validarNumInt(auxIDChar);
+            eliminar(arbol, auxIDInt);
             break;
         case 10:
             inorden(arbol);
