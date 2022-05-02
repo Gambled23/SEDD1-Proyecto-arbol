@@ -10,13 +10,21 @@ struct Nodo
     int dato;
     Nodo *izq;
     Nodo *der;
+    Nodo *padre;
 };
 
 //*Prototipos
-Nodo *crearNodo(int);
-void insertarNodo(Nodo *&, int);
+Nodo *crearNodo(int, Nodo *);
+void insertarNodo(Nodo *&, int, Nodo *);
 void buscarNodo(Nodo *, int);
+
+void menorMayor(Nodo *);
 void editarNodo(Nodo *, int);
+void eliminar(Nodo *, int);
+void eliminarNodo(Nodo *);
+Nodo *minimo(Nodo *);
+void reemplazar(Nodo *, Nodo *);
+void destruirNodo(Nodo *);
 void preorden(Nodo *);
 void inorden(Nodo *);
 void postorden(Nodo *);
@@ -24,21 +32,21 @@ void postorden(Nodo *);
 Nodo *arbol = NULL;
 
 //*Funciones
-Nodo *crearNodo(int n)
+Nodo *crearNodo(int n, Nodo *padre)
 {
     Nodo *nuevo_nodo = new Nodo();
     nuevo_nodo->dato = n;
     nuevo_nodo->izq = NULL;
     nuevo_nodo->izq = NULL;
-
+    nuevo_nodo->padre = padre;
     return nuevo_nodo;
 }
 
-void insertarNodo(Nodo *&arbol, int n)
+void insertarNodo(Nodo *&arbol, int n, Nodo *padre)
 {
     if (arbol == NULL) // arbol vacio
     {
-        Nodo *nuevo_nodo = crearNodo(n);
+        Nodo *nuevo_nodo = crearNodo(n, padre);
         arbol = nuevo_nodo;
     }
     else // arbol tiene 1+ nodos
@@ -46,11 +54,11 @@ void insertarNodo(Nodo *&arbol, int n)
         int valorRaiz = arbol->dato;
         if (n < valorRaiz) // Si el elemento es menor a la raiz
         {
-            insertarNodo(arbol->izq, n);
+            insertarNodo(arbol->izq, n, arbol);
         }
         else // Si el elemento es mayor
         {
-            insertarNodo(arbol->der, n);
+            insertarNodo(arbol->der, n, arbol);
         }
     }
 }
@@ -78,6 +86,28 @@ void buscarNodo(Nodo *arbol, int n)
     }
 }
 
+int datoMenor = 1000;
+int datoMayor = 0;
+void menorMayor(Nodo *arbol)
+{
+    if (arbol == NULL)
+    {
+        return;
+    }
+    else
+    {
+        if (arbol->dato < datoMenor)
+        {
+            datoMenor = arbol->dato;
+        }
+        if (arbol->dato > datoMayor)
+        {
+            datoMayor = arbol->dato;
+        }
+        menorMayor(arbol->izq);
+        menorMayor(arbol->der);
+    }
+}
 void editarNodo(Nodo *arbol, int n)
 {
     int aux;
@@ -89,7 +119,7 @@ void editarNodo(Nodo *arbol, int n)
     else if (arbol->dato == n) // Encuentra el id
     {
         cout << "Ingresa el nuevo valor: ";
-        cin>>auxChar[100];
+        cin >> auxChar[100];
         aux = validarNumInt(auxChar);
         arbol->dato = aux;
     }
@@ -101,6 +131,84 @@ void editarNodo(Nodo *arbol, int n)
     {
         return buscarNodo(arbol->der, n);
     }
+}
+
+void eliminar(Nodo *arbol, int n)
+{
+    if (arbol == NULL)
+    {
+        return;
+    }
+    else if (n < arbol->dato) // Si el valor es menor busca por la izquierda
+    {
+        eliminar(arbol->izq, n);
+    }
+    else if (n > arbol->dato) // Si el valor es mayor busca por la derecha
+    {
+        eliminar(arbol->der, n);
+    }
+    else //Si ya encontraste el valor, eliminalo
+    {
+        eliminarNodo(arbol);
+    }
+}
+void eliminarNodo(Nodo *nodoEliminar)
+{
+    if (nodoEliminar->izq and nodoEliminar->der)
+    {
+        Nodo *menor = minimo(nodoEliminar->der);
+        nodoEliminar->dato = menor->dato;
+        eliminarNodo(menor);
+    }
+    else if (nodoEliminar ->izq)
+    {
+        reemplazar(nodoEliminar, nodoEliminar->izq);
+        destruirNodo(nodoEliminar);
+    }
+    else if (nodoEliminar ->der)
+    {
+        reemplazar(nodoEliminar, nodoEliminar->der);
+        destruirNodo(nodoEliminar);
+    }
+}
+Nodo *minimo(Nodo *arbol)
+{
+    if (arbol == NULL)
+    {
+        return NULL;
+    }
+    if (arbol->izq) //Si tiene hijo izquierda 
+    {
+        return minimo(arbol->izq); //Buscamos la parte mas izquierda posible
+    }
+    else //Si no tiene hijo izquierdo
+    {
+        return arbol; //retornamos el mismo nodo
+    }
+}
+void reemplazar(Nodo *arbol, Nodo *nuevoNodo)
+{
+    if (arbol->padre)
+    {
+        if (arbol->dato == arbol->padre->izq->dato)
+        {
+            arbol->padre->izq = nuevoNodo;
+        }
+        else if (arbol->dato == arbol->padre->der->dato)
+        {
+            arbol->padre->der = nuevoNodo;
+        }
+    }
+    if (nuevoNodo)
+    {
+        nuevoNodo->padre = arbol->padre;
+    }
+}
+void destruirNodo(Nodo *nodo)
+{
+    nodo->izq = NULL;
+    nodo ->der = NULL;
+    delete nodo;
 }
 
 void preorden(Nodo *arbol)
@@ -160,11 +268,11 @@ int main()
         cout << "1) Insertar datos\n";
         cout << "2) Buscar nodo por ID\n";
         cout << "3) Buscar nodo por NOMBRE\n"; // Todo
-        cout << "4) Mostrar minimo ID\n";      // Todo
-        cout << "5) Mostrar maximo ID\n";      // Todo
+        cout << "4) Mostrar minimo ID\n";
+        cout << "5) Mostrar maximo ID\n";
         cout << "6) Mostrar nodo antecesor\n"; // Todo
         cout << "7) Mostrar nodo sucesor\n";   // Todo
-        cout << "8) Editar nodo (por ID)\n";   
+        cout << "8) Editar nodo (por ID)\n";
         cout << "9) Eliminar nodo (por ID)\n"; // Todo
         cout << "10) Mostrar datos en inorden\n";
         cout << "11) Mostrar datos en preorden\n";
@@ -177,7 +285,7 @@ int main()
         case 1:
             cout << "Ingrese el nombre del int\n";
             cin >> intAux;
-            insertarNodo(arbol, intAux); // Insertar el dato
+            insertarNodo(arbol, intAux, NULL); // Insertar el dato
             break;
         case 2:
             cout << "Ingrese la ID del int a buscar\n";
@@ -190,10 +298,12 @@ int main()
             cin >> auxNombre;
             break;
         case 4:
-
+            menorMayor(arbol);
+            cout << "El dato menor es: " << datoMenor << endl;
             break;
         case 5:
-
+            menorMayor(arbol);
+            cout << "El dato mayor es: " << datoMayor << endl;
             break;
         case 6:
 
