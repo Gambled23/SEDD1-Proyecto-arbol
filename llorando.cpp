@@ -19,6 +19,8 @@ void insertarNodo(Nodo *&, int, Nodo *);
 void buscarNodo(Nodo *, int);
 
 void menorMayor(Nodo *);
+void antecesor(Nodo *, int);
+void sucesor(Nodo *, int);
 void editarNodo(Nodo *, int);
 void eliminar(Nodo *, int);
 void eliminarNodo(Nodo *);
@@ -108,6 +110,61 @@ void menorMayor(Nodo *arbol)
         menorMayor(arbol->der);
     }
 }
+
+void antecesor(Nodo *arbol, int n)
+{
+    if (arbol == NULL) // No encuentra el id
+    {
+        return;
+    }
+    else if (arbol->dato == n) // Encuentra el id
+    {
+        if (arbol->padre)
+        {
+            cout << "El antecesor de " << arbol->dato << " es " << arbol->padre->dato << endl;
+        }
+        else
+        {
+            cout<<"El dato no tiene antecesor\n";
+        }
+    }
+    else if (n < arbol->dato)
+    {
+        return antecesor(arbol->izq, n);
+    }
+    else if (n > arbol->dato)
+    {
+        return antecesor(arbol->der, n);
+    }
+}
+
+void sucesor(Nodo *arbol, int n)
+{
+    if (arbol == NULL) // No encuentra el id
+    {
+        return;
+    }
+    else if (arbol->dato == n) // Encuentra el id
+    {
+        if (arbol->izq)
+        {
+            cout << "El sucesor izquierdo de " << arbol->dato << " es " << arbol->izq->dato << endl;
+        }
+        if (arbol->der)
+        {
+            cout << "El sucesor derecho de " << arbol->dato << " es " << arbol->der->dato << endl;
+        }
+    }
+    else if (n < arbol->dato)
+    {
+        return sucesor(arbol->izq, n);
+    }
+    else if (n > arbol->dato)
+    {
+        return sucesor(arbol->der, n);
+    }
+}
+
 void editarNodo(Nodo *arbol, int n)
 {
     int aux;
@@ -147,7 +204,7 @@ void eliminar(Nodo *arbol, int n)
     {
         eliminar(arbol->der, n);
     }
-    else //Si ya encontraste el valor, eliminalo
+    else // Si ya encontraste el valor, eliminalo
     {
         eliminarNodo(arbol);
     }
@@ -160,12 +217,12 @@ void eliminarNodo(Nodo *nodoEliminar)
         nodoEliminar->dato = menor->dato;
         eliminarNodo(menor);
     }
-    else if (nodoEliminar ->izq)
+    else if (nodoEliminar->izq)
     {
         reemplazar(nodoEliminar, nodoEliminar->izq);
         destruirNodo(nodoEliminar);
     }
-    else if (nodoEliminar ->der)
+    else if (nodoEliminar->der)
     {
         reemplazar(nodoEliminar, nodoEliminar->der);
         destruirNodo(nodoEliminar);
@@ -175,7 +232,6 @@ void eliminarNodo(Nodo *nodoEliminar)
         reemplazar(nodoEliminar, NULL);
         destruirNodo(nodoEliminar);
     }
-    
 }
 Nodo *minimo(Nodo *arbol)
 {
@@ -183,13 +239,13 @@ Nodo *minimo(Nodo *arbol)
     {
         return NULL;
     }
-    if (arbol->izq) //Si tiene hijo izquierda 
+    if (arbol->izq) // Si tiene hijo izquierda
     {
-        return minimo(arbol->izq); //Buscamos la parte mas izquierda posible
+        return minimo(arbol->izq); // Buscamos la parte mas izquierda posible
     }
-    else //Si no tiene hijo izquierdo
+    else // Si no tiene hijo izquierdo
     {
-        return arbol; //retornamos el mismo nodo
+        return arbol; // retornamos el mismo nodo
     }
 }
 void reemplazar(Nodo *arbol, Nodo *nuevoNodo)
@@ -213,7 +269,7 @@ void reemplazar(Nodo *arbol, Nodo *nuevoNodo)
 void destruirNodo(Nodo *nodo)
 {
     nodo->izq = NULL;
-    nodo ->der = NULL;
+    nodo->der = NULL;
     delete nodo;
 }
 
@@ -276,10 +332,10 @@ int main()
         cout << "3) Buscar nodo por NOMBRE\n"; // Todo
         cout << "4) Mostrar minimo ID\n";
         cout << "5) Mostrar maximo ID\n";
-        cout << "6) Mostrar nodo antecesor\n"; // Todo
-        cout << "7) Mostrar nodo sucesor\n";   // Todo
+        cout << "6) Mostrar nodo antecesor\n"; 
+        cout << "7) Mostrar nodo sucesor\n";   
         cout << "8) Editar nodo (por ID)\n";
-        cout << "9) Eliminar nodo (por ID)\n"; 
+        cout << "9) Eliminar nodo (por ID)\n";
         cout << "10) Mostrar datos en inorden\n";
         cout << "11) Mostrar datos en preorden\n";
         cout << "12) Mostrar datos en postorden\n";
@@ -312,10 +368,16 @@ int main()
             cout << "El dato mayor es: " << datoMayor << endl;
             break;
         case 6:
-
+            cout << "Ingrese la ID del int a buscar antecesor\n";
+            cin >> auxIDChar;
+            auxIDInt = validarNumInt(auxIDChar);
+            antecesor(arbol, auxIDInt);
             break;
         case 7:
-
+            cout << "Ingrese la ID del int a buscar sucesor\n";
+            cin >> auxIDChar;
+            auxIDInt = validarNumInt(auxIDChar);
+            sucesor(arbol, auxIDInt);
             break;
         case 8:
             cout << "Ingrese la ID del int a editar\n";
