@@ -5,6 +5,15 @@
 #include "contacto.hpp"
 using namespace std;
 
+/*
+
+
+!SOLO FALTA HACER LAS VALIDACIONES
+
+
+*/
+
+
 contacto contacTemp;
 struct Nodo
 {
@@ -354,7 +363,7 @@ int main()
         cout << "Bienvenido al programa para arboles\n";
         cout << "1) Insertar datos\n";
         cout << "2) Buscar nodo por ID\n";
-        cout << "3) Buscar nodo por NOMBRE\n"; // Todo
+        cout << "3) Buscar nodo por NOMBRE\n";
         cout << "4) Mostrar minimo ID\n";
         cout << "5) Mostrar maximo ID\n";
         cout << "6) Mostrar nodo antecesor\n";
