@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <regex>
 #include "validaciones.hpp"
 #include "contacto.hpp"
 using namespace std;
@@ -12,7 +13,6 @@ using namespace std;
 
 
 */
-
 
 contacto contacTemp;
 struct Nodo
@@ -40,6 +40,10 @@ void destruirNodo(Nodo *);
 void preorden(Nodo *);
 void inorden(Nodo *);
 void postorden(Nodo *);
+//*Prototipos validaciones
+string validarNombre(string);
+string validarEmail(string);
+string validarDireccion(string);
 
 Nodo *arbol = NULL;
 
@@ -216,11 +220,11 @@ void editarNodo(Nodo *arbol, int n)
     }
     else if (n < arbol->dato.id)
     {
-        return buscarNodo(arbol->izq, n);
+        return editarNodo(arbol->izq, n);
     }
     else if (n > arbol->dato.id)
     {
-        return buscarNodo(arbol->der, n);
+        return editarNodo(arbol->der, n);
     }
 }
 
@@ -380,11 +384,17 @@ int main()
         {
         case 1:
             cout << "Ingrese el nombre del contacto\n";
-            cin >> contacTemp.nombre;
+            cin.sync();
+            getline(cin, auxString);
+            contacTemp.nombre = validarNombre(auxString);
             cout << "Ingrese el email del contacto\n";
-            cin >> contacTemp.email;
+            cin.sync();
+            getline(cin, auxString);
+            contacTemp.email = validarEmail(auxString);
             cout << "Ingrese la direccion del contacto\n";
-            cin >> contacTemp.direccion;
+            cin.sync();
+            getline(cin, auxString);
+            contacTemp.direccion = validarDireccion(auxString);
             cout << "Ingrese la ID del contacto\n";
             cin >> auxIDChar;
             contacTemp.id = validarNumInt(auxIDChar);
@@ -398,7 +408,9 @@ int main()
             break;
         case 3:
             cout << "Ingrese el nombre del contacto a buscar\n";
-            cin >> auxString;
+            cin.sync();
+            getline(cin, auxString);
+            auxString = validarNombre(auxString);
             buscarNombre(arbol, auxString);
             break;
         case 4:
@@ -410,25 +422,25 @@ int main()
             cout << "El dato mayor es: " << datoMayor << endl;
             break;
         case 6:
-            cout << "Ingrese la ID del int a buscar antecesor\n";
+            cout << "Ingrese la ID del contacto a buscar antecesor\n";
             cin >> auxIDChar;
             auxIDInt = validarNumInt(auxIDChar);
             antecesor(arbol, auxIDInt);
             break;
         case 7:
-            cout << "Ingrese la ID del int a buscar sucesor\n";
+            cout << "Ingrese la ID del contacto a buscar sucesor\n";
             cin >> auxIDChar;
             auxIDInt = validarNumInt(auxIDChar);
             sucesor(arbol, auxIDInt);
             break;
         case 8:
-            cout << "Ingrese la ID del int a editar\n";
+            cout << "Ingrese la ID del contacto a editar\n";
             cin >> auxIDChar;
             auxIDInt = validarNumInt(auxIDChar);
             editarNodo(arbol, auxIDInt);
             break;
         case 9:
-            cout << "Ingrese la ID del int a eliminar\n";
+            cout << "Ingrese la ID del contacto a eliminar\n";
             cin >> auxIDChar;
             auxIDInt = validarNumInt(auxIDChar);
             eliminar(arbol, auxIDInt);
@@ -443,6 +455,43 @@ int main()
         case 12:
             postorden(arbol);
             break;
+        case 69:
+            contacTemp.direccion = "Calle #5";
+            contacTemp.email = "contacto5@gmail.com";
+            contacTemp.id = 5;
+            contacTemp.nombre = "contacto 5";
+            insertarNodo(arbol, contacTemp, NULL); // Insertar el dato
+            contacTemp.direccion = "Calle #3";
+            contacTemp.email = "contacto3@gmail.com";
+            contacTemp.id = 3;
+            contacTemp.nombre = "contacto 3";
+            insertarNodo(arbol, contacTemp, NULL); // Insertar el dato
+            contacTemp.direccion = "Calle #14";
+            contacTemp.email = "contacto14@gmail.com";
+            contacTemp.id = 14;
+            contacTemp.nombre = "contacto 14";
+            insertarNodo(arbol, contacTemp, NULL); // Insertar el dato
+            contacTemp.direccion = "Calle #17";
+            contacTemp.email = "contacto17@gmail.com";
+            contacTemp.id = 17;
+            contacTemp.nombre = "contacto 17";
+            insertarNodo(arbol, contacTemp, NULL); // Insertar el dato
+            contacTemp.direccion = "Calle #2";
+            contacTemp.email = "contacto2@gmail.com";
+            contacTemp.id = 2;
+            contacTemp.nombre = "contacto 2";
+            insertarNodo(arbol, contacTemp, NULL); // Insertar el dato
+            contacTemp.direccion = "Calle #9";
+            contacTemp.email = "contacto9@gmail.com";
+            contacTemp.id = 9;
+            contacTemp.nombre = "contacto9";
+            insertarNodo(arbol, contacTemp, NULL); // Insertar el dato
+            contacTemp.direccion = "Calle #1";
+            contacTemp.email = "contacto1@gmail.com";
+            contacTemp.id = 1;
+            contacTemp.nombre = "contacto 1";
+            insertarNodo(arbol, contacTemp, NULL); // Insertar el dato
+            break;
         case 0:
             cout << "Gracias por su preferencia" << endl;
             break;
@@ -455,4 +504,66 @@ int main()
     } while (opcInt != 0);
     system("PAUSE");
     return 0;
+}
+
+//*Validaciones
+regex ema("(.*)(@)(.*)(.com)");
+regex nom("(([a-zA-Z])(\\s*)([a-zA-Z])*)*");
+regex dire("([a-zA-Z])*(\\s*)(#)([0-9]*)");
+string validarNombre(string cadena)
+{
+    bool meme = false;
+    do
+    {
+        if (regex_match(cadena, nom))
+        {
+            meme = true;
+        }
+        else
+        {
+            cout << "Recuerde que para el nombre solo son aceptadas letras y espacios\n";
+            cout << "Favor de ingresar el dato nuevamente\n";
+            cin.sync();
+            getline(cin, cadena);
+        }
+    } while (!meme);
+    return cadena;
+}
+string validarEmail(string cadena)
+{
+    bool meme = false;
+    do
+    {
+        if (regex_match(cadena, ema))
+        {
+            meme = true;
+        }
+        else
+        {
+            cout << "Recuerde que la estructura del email es 'email@dominio.com'\n";
+            cout << "Favor de ingresar el dato nuevamente\n";
+            cin.sync();
+            getline(cin, cadena);
+        }
+    } while (!meme);
+    return cadena;
+}
+string validarDireccion(string cadena)
+{
+    bool meme = false;
+    do
+    {
+        if (regex_match(cadena, dire))
+        {
+            meme = true;
+        }
+        else
+        {
+            cout << "Recuerde que la estructura de la direccion es 'Calle #numero_de_casa'\n";
+            cout << "Favor de ingresar el dato nuevamente\n";
+            cin.sync();
+            getline(cin, cadena);
+        }
+    } while (!meme);
+    return cadena;
 }
