@@ -5,19 +5,20 @@
 #include "contacto.hpp"
 using namespace std;
 
+contacto contacTemp;
 struct Nodo
 {
-    int dato;
+    contacto dato;
     Nodo *izq;
     Nodo *der;
     Nodo *padre;
 };
 
 //*Prototipos
-Nodo *crearNodo(int, Nodo *);
-void insertarNodo(Nodo *&, int, Nodo *);
+Nodo *crearNodo(contacto, Nodo *);
+void insertarNodo(Nodo *&, contacto, Nodo *);
 void buscarNodo(Nodo *, int);
-
+void buscarNombre(Nodo *, string);
 void menorMayor(Nodo *);
 void antecesor(Nodo *, int);
 void sucesor(Nodo *, int);
@@ -34,7 +35,7 @@ void postorden(Nodo *);
 Nodo *arbol = NULL;
 
 //*Funciones
-Nodo *crearNodo(int n, Nodo *padre)
+Nodo *crearNodo(contacto n, Nodo *padre)
 {
     Nodo *nuevo_nodo = new Nodo();
     nuevo_nodo->dato = n;
@@ -44,7 +45,7 @@ Nodo *crearNodo(int n, Nodo *padre)
     return nuevo_nodo;
 }
 
-void insertarNodo(Nodo *&arbol, int n, Nodo *padre)
+void insertarNodo(Nodo *&arbol, contacto n, Nodo *padre)
 {
     if (arbol == NULL) // arbol vacio
     {
@@ -53,8 +54,8 @@ void insertarNodo(Nodo *&arbol, int n, Nodo *padre)
     }
     else // arbol tiene 1+ nodos
     {
-        int valorRaiz = arbol->dato;
-        if (n < valorRaiz) // Si el elemento es menor a la raiz
+        contacto valorRaiz = arbol->dato;
+        if (n.id < valorRaiz.id) // Si el elemento es menor a la raiz
         {
             insertarNodo(arbol->izq, n, arbol);
         }
@@ -71,20 +72,40 @@ void buscarNodo(Nodo *arbol, int n)
     {
         return;
     }
-    else if (arbol->dato == n) // Encuentra el id
+    else if (arbol->dato.id == n) // Encuentra el id
     {
-        cout << "Nombre: " << arbol->dato << endl;
-        cout << "ID: " << arbol->dato << endl;
-        cout << "Direccion: " << arbol->dato << endl;
-        cout << "Email: " << arbol->dato << endl;
+        cout << "Nombre: " << arbol->dato.nombre << endl;
+        cout << "ID: " << arbol->dato.id << endl;
+        cout << "Direccion: " << arbol->dato.direccion << endl;
+        cout << "Email: " << arbol->dato.email << endl;
     }
-    else if (n < arbol->dato)
+    else if (n < arbol->dato.id)
     {
         return buscarNodo(arbol->izq, n);
     }
-    else if (n > arbol->dato)
+    else if (n > arbol->dato.id)
     {
         return buscarNodo(arbol->der, n);
+    }
+}
+
+void buscarNombre(Nodo *arbol, string n)
+{
+    if (arbol == NULL)
+    {
+        return;
+    }
+    else
+    {
+        buscarNombre(arbol->izq, n);
+        if (arbol->dato.nombre == n)
+        {
+            cout << "ID: " << arbol->dato.id << endl;
+            cout << "NOMRE: " << arbol->dato.nombre << endl;
+            cout << "EMAIL: " << arbol->dato.email << endl;
+            cout << "DIRECCION: " << arbol->dato.direccion << endl;
+        }
+        buscarNombre(arbol->der, n);
     }
 }
 
@@ -98,13 +119,13 @@ void menorMayor(Nodo *arbol)
     }
     else
     {
-        if (arbol->dato < datoMenor)
+        if (arbol->dato.id < datoMenor)
         {
-            datoMenor = arbol->dato;
+            datoMenor = arbol->dato.id;
         }
-        if (arbol->dato > datoMayor)
+        if (arbol->dato.id > datoMayor)
         {
-            datoMayor = arbol->dato;
+            datoMayor = arbol->dato.id;
         }
         menorMayor(arbol->izq);
         menorMayor(arbol->der);
@@ -117,22 +138,22 @@ void antecesor(Nodo *arbol, int n)
     {
         return;
     }
-    else if (arbol->dato == n) // Encuentra el id
+    else if (arbol->dato.id == n) // Encuentra el id
     {
         if (arbol->padre)
         {
-            cout << "El antecesor de " << arbol->dato << " es " << arbol->padre->dato << endl;
+            cout << "La ID antecesora de " << arbol->dato.id << " es " << arbol->padre->dato.id << endl;
         }
         else
         {
-            cout<<"El dato no tiene antecesor\n";
+            cout << "El dato no tiene antecesor\n";
         }
     }
-    else if (n < arbol->dato)
+    else if (n < arbol->dato.id)
     {
         return antecesor(arbol->izq, n);
     }
-    else if (n > arbol->dato)
+    else if (n > arbol->dato.id)
     {
         return antecesor(arbol->der, n);
     }
@@ -144,22 +165,22 @@ void sucesor(Nodo *arbol, int n)
     {
         return;
     }
-    else if (arbol->dato == n) // Encuentra el id
+    else if (arbol->dato.id == n) // Encuentra el id
     {
         if (arbol->izq)
         {
-            cout << "El sucesor izquierdo de " << arbol->dato << " es " << arbol->izq->dato << endl;
+            cout << "La ID sucesora izquierda de " << arbol->dato.id << " es " << arbol->izq->dato.id << endl;
         }
         if (arbol->der)
         {
-            cout << "El sucesor derecho de " << arbol->dato << " es " << arbol->der->dato << endl;
+            cout << "La ID sucesora derecha de " << arbol->dato.id << " es " << arbol->der->dato.id << endl;
         }
     }
-    else if (n < arbol->dato)
+    else if (n < arbol->dato.id)
     {
         return sucesor(arbol->izq, n);
     }
-    else if (n > arbol->dato)
+    else if (n > arbol->dato.id)
     {
         return sucesor(arbol->der, n);
     }
@@ -167,24 +188,28 @@ void sucesor(Nodo *arbol, int n)
 
 void editarNodo(Nodo *arbol, int n)
 {
-    int aux;
-    char auxChar[100];
+    string aux;
     if (arbol == NULL) // No encuentra el id
     {
         return;
     }
-    else if (arbol->dato == n) // Encuentra el id
+    else if (arbol->dato.id == n) // Encuentra el id
     {
-        cout << "Ingresa el nuevo valor: ";
-        cin >> auxChar[100];
-        aux = validarNumInt(auxChar);
-        arbol->dato = aux;
+        cout << "Ingresa el nuevo nombre: ";
+        cin >> aux;
+        arbol->dato.nombre = aux;
+        cout << "Ingresa el nuevo email: ";
+        cin >> aux;
+        arbol->dato.email = aux;
+        cout << "Ingresa la nueva direccion: ";
+        cin >> aux;
+        arbol->dato.direccion = aux;
     }
-    else if (n < arbol->dato)
+    else if (n < arbol->dato.id)
     {
         return buscarNodo(arbol->izq, n);
     }
-    else if (n > arbol->dato)
+    else if (n > arbol->dato.id)
     {
         return buscarNodo(arbol->der, n);
     }
@@ -196,11 +221,11 @@ void eliminar(Nodo *arbol, int n)
     {
         return;
     }
-    else if (n < arbol->dato) // Si el valor es menor busca por la izquierda
+    else if (n < arbol->dato.id) // Si el valor es menor busca por la izquierda
     {
         eliminar(arbol->izq, n);
     }
-    else if (n > arbol->dato) // Si el valor es mayor busca por la derecha
+    else if (n > arbol->dato.id) // Si el valor es mayor busca por la derecha
     {
         eliminar(arbol->der, n);
     }
@@ -252,11 +277,11 @@ void reemplazar(Nodo *arbol, Nodo *nuevoNodo)
 {
     if (arbol->padre)
     {
-        if (arbol->dato == arbol->padre->izq->dato)
+        if (arbol->dato.id == arbol->padre->izq->dato.id)
         {
             arbol->padre->izq = nuevoNodo;
         }
-        else if (arbol->dato == arbol->padre->der->dato)
+        else if (arbol->dato.id == arbol->padre->der->dato.id)
         {
             arbol->padre->der = nuevoNodo;
         }
@@ -281,7 +306,7 @@ void preorden(Nodo *arbol)
     }
     else
     {
-        cout << arbol->dato << " - ";
+        cout << arbol->dato.id << " - ";
         preorden(arbol->izq);
         preorden(arbol->der);
     }
@@ -296,7 +321,7 @@ void inorden(Nodo *arbol)
     else
     {
         inorden(arbol->izq);
-        cout << arbol->dato << " - ";
+        cout << arbol->dato.id << " - ";
         inorden(arbol->der);
     }
 }
@@ -311,7 +336,7 @@ void postorden(Nodo *arbol)
     {
         postorden(arbol->izq);
         postorden(arbol->der);
-        cout << arbol->dato << " - ";
+        cout << arbol->dato.id << " - ";
     }
 }
 
@@ -322,7 +347,7 @@ int main()
     int opcInt;
     char auxIDChar[100];
     int auxIDInt;
-    string auxNombre;
+    string auxString;
     do
     {
         system("cls");
@@ -332,8 +357,8 @@ int main()
         cout << "3) Buscar nodo por NOMBRE\n"; // Todo
         cout << "4) Mostrar minimo ID\n";
         cout << "5) Mostrar maximo ID\n";
-        cout << "6) Mostrar nodo antecesor\n"; 
-        cout << "7) Mostrar nodo sucesor\n";   
+        cout << "6) Mostrar nodo antecesor\n";
+        cout << "7) Mostrar nodo sucesor\n";
         cout << "8) Editar nodo (por ID)\n";
         cout << "9) Eliminar nodo (por ID)\n";
         cout << "10) Mostrar datos en inorden\n";
@@ -345,19 +370,27 @@ int main()
         switch (opcInt)
         {
         case 1:
-            cout << "Ingrese el nombre del int\n";
-            cin >> intAux;
-            insertarNodo(arbol, intAux, NULL); // Insertar el dato
+            cout << "Ingrese el nombre del contacto\n";
+            cin >> contacTemp.nombre;
+            cout << "Ingrese el email del contacto\n";
+            cin >> contacTemp.email;
+            cout << "Ingrese la direccion del contacto\n";
+            cin >> contacTemp.direccion;
+            cout << "Ingrese la ID del contacto\n";
+            cin >> auxIDChar;
+            contacTemp.id = validarNumInt(auxIDChar);
+            insertarNodo(arbol, contacTemp, NULL); // Insertar el dato
             break;
         case 2:
-            cout << "Ingrese la ID del int a buscar\n";
+            cout << "Ingrese la ID del contacto a buscar\n";
             cin >> auxIDChar;
             auxIDInt = validarNumInt(auxIDChar);
             buscarNodo(arbol, auxIDInt);
             break;
         case 3:
-            cout << "Ingrese el nombre del int a buscar\n";
-            cin >> auxNombre;
+            cout << "Ingrese el nombre del contacto a buscar\n";
+            cin >> auxString;
+            buscarNombre(arbol, auxString);
             break;
         case 4:
             menorMayor(arbol);
@@ -411,7 +444,6 @@ int main()
 
         system("PAUSE");
     } while (opcInt != 0);
-
     system("PAUSE");
     return 0;
 }

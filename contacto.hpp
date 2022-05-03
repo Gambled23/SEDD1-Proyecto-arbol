@@ -10,10 +10,9 @@ class contacto
 {
 public:
     contacto();
+    contacto(string, string, string, int);
     int id;
     string nombre, direccion, email;
-    contacto(string, string, string, int);
-
 private:
 };
 contacto::contacto(string nom, string dir, string ema, int aidi)
